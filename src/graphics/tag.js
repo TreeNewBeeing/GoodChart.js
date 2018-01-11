@@ -1,4 +1,5 @@
 import * as d3 from 'd3'
+import { bindTag } from '../interaction/tag'
 
 export class tag{
 	constructor(parent,chart){
@@ -7,11 +8,14 @@ export class tag{
 	}
 
 	draw(){
-		this.parent.element.append("text")
+		var tag = this.parent.element.append("text")
 			.text(this.getTag)
 			.attr("dy",this.getDy.bind(this))
 			.style("text-anchor", "middle")
 			.style("fill","black")
+
+		this.element = tag
+		bindTag(this)
 	}
 
 	getTag(d){

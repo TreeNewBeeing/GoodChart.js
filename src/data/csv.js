@@ -1,19 +1,33 @@
 import * as d3 from "d3"
-import { bin, bins } from "../model/bin"
+import { bins } from "../model/bin"
+import { gradBins } from "../model/gradBins"
 
-export function readCSV(file,label,after){
+export function readCSV(file,label,interval,after,mode){
 	
 	d3.csv(file, function(error, data) {
-	  if (error) throw error;
+		if (error) throw error;
 
-	  data.forEach(function(d) {
-	    d[label] = +d[label];
-	  })
+		data.forEach(function(d) {
+			d[label] = +d[label];
+		})
 
-    var interval = 10;
-	  var bins0 = new bins(data,label,interval)
+		var bins0;
+		switch(mode){
+			case "normal":
+				bins0 = new bins(data,label,interval)
+				break;
+			case "gradual":
+				bins0 = new gradBins(data,label,interval)
+				// bins0.updateArrange([10,20,30,40,50,65,70,80])
+				console.log(bins0)
+				break;
+			default:
+				bins0 = new bins(data,label,interval)
+				break;
+		}
+	
 
-    after(bins0)
+    	after(bins0)
 	})
 
 }

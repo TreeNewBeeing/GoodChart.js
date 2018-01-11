@@ -10,16 +10,16 @@ import { readCSV } from "../data/csv"
 // const label = "Age",
 //       file = "../public/data.csv"
 
-export function read(file,label){
-  readCSV(file,label,main)
+export function read(file,label,interval,mode){
+  readCSV(file,label,interval,main,mode)
 }
 
 
 export function main(bins){
 
-
   var chart0 = new chart(bins)
   chart0.draw()
+
 
   var bar0 = new bar(chart0,chart0)
   bar0.draw()

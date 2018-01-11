@@ -33,6 +33,7 @@ export class toolTip{
 
 	hide(d){
 		this.element.hide(d)
+		this.element.offset([-10,0])
 	}
 
 	move(dx){
@@ -43,24 +44,35 @@ export class toolTip{
 		this.element.style("left",left+"px")
 	}
 
-	update(dx,x1,x2){
+	updateCombine(dx,x1,x2,pos1,pos2){
 		this.move(dx)
 
-		
-		var container = this.chart.bins.container
-		var value = 0;
-		for(var i=x1;i<=x2;i++){
-			value += container[i].value()
-		}
-
-		var html = "<strong># of people:</strong> <span style='color:red;'>" + value + "</span><br> ";
-		var rangeMin = container[x1].rangeMin()
-	  	var rangeMax = container[x2].rangeMax()
-	  	html += "<strong>range:</strong> <span style='colore:red;text-align:center'>" + rangeMin +" - "+ rangeMax + "</span>";
+		// console.log(pos2)
+		var html = "<strong># of people:</strong> <span style='color:red;'>" + (pos2-pos1) + "</span><br> ";
+	  	html += "<strong>range:</strong> <span style='colore:red;text-align:center'>" + x1 +" - "+ x2 + "</span>";
 
 		d3.select('.d3-tip').html(html)
 
 
+	}
+
+	updateSplit(dx, i, pos1, pos2){
+		// this.move(dx)
+
+		// var container = this.chart.bins.container
+		// console.log(pos1)
+		// var rangeMin = container[i].rangePos(pos1);
+		// var rangeMax = container[i].rangePos(pos2);
+
+		// var value = 0;
+		// for(var x=pos1;x<=pos2;x++){
+		// 	value += container[i][x].length;
+		// }
+
+		// var html = "<strong># of people:</strong> <span style='color:red;'>" + value + "</span><br> ";
+		// html += "<strong>range:</strong> <span style='colore:red;text-align:center'>" + rangeMin +" - "+ rangeMax + "</span>";
+
+		// d3.select('.d3-tip').html(html)
 	}
 
 }

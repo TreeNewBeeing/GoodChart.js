@@ -63,12 +63,15 @@ export class triangle{
 
 		var triangles = []
 		var triLength = this.chart.triLength
-		var triHeight = this.chart.triPadding
+		var triHeight = this.chart.triPadding 
+		if(rect.attr("y")){
+			triHeight += parseInt(rect.attr("y")) 
+		}
 		
 		var leftX = parseInt(rect.attr("x"))
 		var rightX = leftX + parseInt(rect.attr("width"))
 		
-		var rectHeight = parseInt(rect.attr("height"))
+		var rectHeight = parseInt(rect.attr("height")) 
 		
 		if( triHeight > rectHeight){
 			triHeight = rectHeight

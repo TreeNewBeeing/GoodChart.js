@@ -67,14 +67,16 @@ export class chart{
 	getRectX(){
 
 		var arr = []
-		var container = this.bins.container
-		var start = 0
 
-		for(var i=0; i<container.length;i++){
-			start = start + (this.rectWidth*container[i].data.length+this.rectInterval)
-			arr.push(start - (this.rectWidth*container[i].data.length/2))
+		var bins = this.bins;
+		var start = 0;
+
+		for(var i=0; i<bins.container.length;i++){
+			var length = bins.container[i].size() / bins.interval;
+			start = start + (this.rectWidth*length+this.rectInterval)
+			arr.push(start - (this.rectWidth*length/2))
 		}
-
+		// console.log(arr)
 		return arr;
 
 	}

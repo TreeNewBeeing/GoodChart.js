@@ -23,12 +23,12 @@ export class rectangle{
 
 	// return x of rect relative to bar
 	getX(d){
-		return -(this.chart.rectWidth/2*d.size())
+		return -(this.chart.rectWidth/2*d.size()/this.chart.bins.interval)
 	}
 
 	// return width of rect 
 	getWidth(d){
-		return d.size()*this.chart.rectWidth
+		return d.size()*this.chart.rectWidth/this.chart.bins.interval
 	}
 
 	// return height of rect

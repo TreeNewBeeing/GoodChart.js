@@ -1,9 +1,10 @@
+// import { bindBar } from '../interaction/bar'
+
 export class bar{
 	
 	constructor(parent,chart){
 		this.parent = parent;
 		this.chart = chart;
-		this.element = null;
 	}
 
 	draw(){
@@ -11,13 +12,17 @@ export class bar{
 	 		.data(this.parent.bins.container)
 	  		.enter().append("g")
 		    	.attr("class", "bar")
-		    	.attr("transform", this.getTransform.bind(this));
+		    	.attr("transform", this.getTransform.bind(this))
+		    	.style('cursor','pointer')
 		this.element = bar;
+		// bindBar(this)
+
 	}
 
-	getTransform(d){
+	getTransform(d,i){
 
-		var translateX = this.parent.rectX[d.index],
+		// console.log(i);
+		var translateX = this.parent.rectX[i],
 			translateY = this.parent.y(d.value());
 
 		return "translate(" + translateX + "," + translateY + ")"; 

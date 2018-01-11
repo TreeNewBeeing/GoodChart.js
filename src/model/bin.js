@@ -77,6 +77,9 @@ export class bins {
 
 	split(index1,pos){
 		
+		if(pos >= this.container[index1].size() || pos <= 0){
+			return ;
+		}
 		var newContainer = []
 		// add bins before index1
 		for(var i=0; i<index1; i++){
@@ -109,9 +112,7 @@ export class bins {
 
 		var maxY = 0;
 		newContainer.forEach(function(d){
-			d.data.forEach(function(b){
-				maxY = b.length > maxY? b.length : maxY
-			})
+			maxY = d.value() > maxY? d.value() : maxY
 		})
 		this.maxY = maxY
 		this.container = newContainer;
@@ -153,6 +154,10 @@ class bin{
 
 	rangeMax(){
 		return (this.rangeMin()+(this.parent.interval*this.size()))
+	}
+
+	rangePos(i){
+		return (parseInt(this.data[i][0][this.parent.label]/this.parent.interval)*this.parent.interval);
 	}
 
 }
