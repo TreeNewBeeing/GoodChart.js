@@ -15,6 +15,7 @@ export class rectangle{
 			.attr("width", this.getWidth.bind(this))
 			.attr("height", this.getHeight.bind(this))
 			.style("fill","blue")
+			.style("stroke","red")
 
 	    this.element = rect
 	    bindRectangle(this)

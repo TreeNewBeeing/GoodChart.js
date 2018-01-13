@@ -13,6 +13,7 @@ export class tag{
 			.attr("dy",this.getDy.bind(this))
 			.style("text-anchor", "middle")
 			.style("fill","black")
+			.style("font","10px sans-serif")
 
 		this.element = tag
 		bindTag(this)

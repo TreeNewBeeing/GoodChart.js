@@ -18,24 +18,28 @@ export class triangle{
 		.attr("class","draggable ll")
 		.attr("fill","black")
 		.style("display","true")
+		.style("cursor","w-resize")
 
 		// right-right triangle
 		var tri1 = this.parent.element.append("polygon")
 		.attr("class","draggable rr")
 		.attr("fill","black")
 		.style("display","true") 
+		.style("cursor","e-resize")
 
 		// left-right triangle
 		var tri2 = this.parent.element.append("polygon")
 		.attr("class","draggable lr")
 		.attr("fill","black")
 		.style("display","true") 
+		.style("cursor","e-resize")
 
 		// right-left triangle
 		var tri3 = this.parent.element.append("polygon")
 		.attr("class","draggable rl")
 		.attr("fill","black")
 		.style("display","true") 
+		.style("cursor","w-resize")
 
 		this.triangles = this.getTriPos()
 

@@ -97,14 +97,14 @@ export class gradBins {
 			}
 		}
 
+		// console.log(d.i)
 		for(var i=0;i<this.container.length;i++){
-			if(this.container[i].i >= d.i){ 
+			if(this.container[i].min >= d.min){ 
 				d.pre = this.container[i].pre;
 				break;
 			}
 		}
 
-		// console.log(d)
 	}
 
 	updateLL(d){
@@ -119,26 +119,7 @@ export class gradBins {
 			d.pre.max = d.min
 		}
 
-		var start = this.container[this.container.length-1]
-		if(d.next == null){
-			start = d;
-		}
-
-		var high = 0;
-		var container = [];
-		while(start!=null){
-			container.unshift(start);
-			var value = start.value()
-			if( value > high){
-				high = value;
-			}
-			start = start.pre;
-			
-		}
-
-		console.log(container)
-		this.maxY = high
-		this.container = container
+		this.resetContainer(d)
 
 	}
 
@@ -147,40 +128,40 @@ export class gradBins {
 
 	combineRight(d,num){
 
-		// last element
-		if(d == null){
-			return;
-		}
-
+		d.min = num
 		for(var i=this.data.length-1;i>=0;i--){
 			if(this.data[i][this.label] < num){
 				d.i = i+1;
 				break;
 			}
 		}
-		console.log(i)
-		// console.log(d.i)
+
 		for(var i=this.container.length-1;i>=0;i--){
-			if(this.container[i].i <= d.i){ 
-				d.min = num;
-				d.next = this.container[i].next
-				
+			if(this.container[i].min <= d.min){ 
+				d.next = this.container[i].next	
+				d.max = d.next == null ? this.container[i].max : d.next.min
 				break;
 			}
 		}
 
-		// console.log(d)
+		console.log(d.i,d.next)
+
 	}
 
 	updateRR(d){
 
-		// last element
-		if(d == null){
+		console.log(d.min)
+		//  inserted node should not exist: no insertion needed
+		if(d.min == d.max || d.pre.min == d.min){
+			d.pre.next = d.next;
+			d.pre.max = d.max;
+			this.resetContainer(d)
 			return;
 		}
-
-
-		console.log(d)
+		// next
+		if(d.next != null){
+			d.next.pre = d
+		}
 
 		// pre
 		if(d.pre != null){
@@ -188,59 +169,44 @@ export class gradBins {
 			d.pre.next = d;
 		}
 
-		if(d.i == this.data.length){
-			d.pre.next = null
-		}
-
-		// next
-		if(d.next != null){
-			d.next.pre = d
-			d.max = d.next.min
-		}else{
-			d.max = this.container[this.container.length-1].max
-		}
-
-
-		var start = this.container[0]
-		if(d.pre == null){
-			start = d;
-		}
+		this.resetContainer(d)
 		
-		var high = 0;
-		var container = [];
-		while(start!=null){
-			container.push(start);
-			var value = start.value()
-			if( value > high){
-				high = value
-			}
-			start = start.next;
-			// console.log(start)
-			
-		}
-
-		
-		this.maxY = high
-		this.container = container
 
 	}
 
+
+	// LR
 	splitLeft(d,num){
-		for(var i=d.pre.i;i<this.data.length;i++){
-			if(this.data[i][this.label] >= num){
+		var min = d.pre.i
+		var max = d.next == null ? this.data.length : d.next.i
+		d.i = max
+		for(var i=min;i<=max;i++){
+			if(this.data[i] == null || this.data[i][this.label] > num){
 				d.i = i;
 				break;
 			}
 		}
+		console.log(d.i)
 		d.min = num;
 		
 	}
 
 	updateLR(d){
-		if(d.i == d.pre.i || d.i == d.next.i){
-			return;
+		//  inserted node should not exist: no move left
+		var first =  d.min == this.container[0].min;
+		if(d.pre.min == d.min){
+			return
 		}
 
+		// inserted node should not exist: no move right
+		var last =  d.min == this.container[this.container.length-1].max;
+		if(last){
+			return;
+		}else{
+			if(d.min == d.max){
+				return;
+			}
+		}
 
 		// pre
 		d.pre.max = d.min;
@@ -253,11 +219,42 @@ export class gradBins {
 		}
 
 		// console.log(this.container)
+		this.resetContainer(d)		
+	}
+
+
+	// RL
+	splitRight(d,num){
+		var min = d.pre.i
+		var max = d.next == null ? this.data.length : d.next.i
+		d.i = max
+		for(var i=min;i<=max;i++){
+			if(this.data[i] == null || this.data[i][this.label] >= num){
+				d.i = i;
+				break;
+			}
+		}
+		console.log(d.i)
+		d.min = num;
+	}
+	updateRL(d){
+		this.updateLR(d);
+	}
+
+	find(x){
+		for(var i=d.i;i>=0;i--){
+			if(this.data[i][this.label] < num){
+				d.i = i;
+				break;
+			}
+		}
+	}
+
+	resetContainer(d){
 		var start = this.container[0]
 		if(d.pre == null){
 			start = d;
 		}
-		
 		var high = 0;
 		var container = [];
 		while(start!=null){
@@ -270,19 +267,8 @@ export class gradBins {
 			// console.log(start)
 			
 		}
-
 		this.maxY = high
 		this.container = container
-	}
-
-
-	find(x){
-		for(var i=d.i;i>=0;i--){
-			if(this.data[i][this.label] < num){
-				d.i = i;
-				break;
-			}
-		}
 	}
 	getMinX(){
 		return parseInt(this.data[0][this.label]/this.interval)*this.interval;

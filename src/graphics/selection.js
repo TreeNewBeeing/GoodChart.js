@@ -22,12 +22,15 @@ export class selection{
 	      .attr("i",this.i)
 	      .attr("width", this.width)
 	      .attr("height", this.height)
-	      .style("fill","red")
-	      .style("opacity","0.8")
+	      .style("fill","white")
+	      .attr("stroke","red")
+	      .style("opacity","0.5")
 
 	    this.adapt()
 	    var triangle0 = new triangle(this,this.chart)
 	    triangle0.draw()
+
+	    
 
 	    bindSelection(this)
 	    // this.parent.element.appendChild(selection)
@@ -54,6 +57,8 @@ export class selection{
 				.attr("y",-100+height)
 				.style("stroke","red")
 				.style("opacity","0.5")
+				.attr('stroke-dasharray', '10,5')
+				.style('border-top',"0px")
 			tooltip.element.offset([-130+height,0])
 		}
 	}

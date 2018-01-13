@@ -14,7 +14,7 @@ export class chart{
 		this.height = 500 - this.margin.top - this.margin.bottom
 
 		// rectangle config
-		this.rectWidth = 30
+		this.rectWidth = 50
 		this.rectInterval = 30
 
 		// bar config
@@ -69,11 +69,11 @@ export class chart{
 		var arr = []
 
 		var bins = this.bins;
-		var start = 0;
+		var start = this.rectInterval;
 
 		for(var i=0; i<bins.container.length;i++){
 			var length = bins.container[i].size() / bins.interval;
-			start = start + (this.rectWidth*length+this.rectInterval)
+			start = start + (this.rectWidth*length)
 			arr.push(start - (this.rectWidth*length/2))
 		}
 		// console.log(arr)

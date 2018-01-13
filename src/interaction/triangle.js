@@ -11,26 +11,38 @@ var combine = true;
 var sub = null;
 
 export function bindTriangle(tri){
-	tri.element[0].call(d3.drag()
+	var i = tri.parent.i;
+	if(i != 0){
+		tri.element[0].call(d3.drag()
 			.on("start",selectedTriangleLL.bind(tri))
 		  	.on("drag",moveTriangleLL.bind(tri))
 		  	.on("end",dropTriangleLL.bind(tri))
-	)
-	tri.element[1].call(d3.drag()
+		)
+
+	}else{
+		tri.element[0].style("cursor","not-allowed")
+	}
+
+
+	if(i != tri.chart.bins.container.length-1){
+		tri.element[1].call(d3.drag()
 			.on("start",selectedTriangleRR.bind(tri))
 		  	.on("drag",moveTriangleRR.bind(tri))
 		  	.on("end",dropTriangleRR.bind(tri))
-	)
+		)
+	}else{
+		tri.element[1].style("cursor","not-allowed")
+	}
 	tri.element[2].call(d3.drag()
 			.on("start",selectedTriangleLR.bind(tri))
 		  	.on("drag",moveTriangleLR.bind(tri))
 		  	.on("end",dropTriangleLR.bind(tri))
 	)
-	// tri.element[3].call(d3.drag()
-	// 		.on("start",selectedTriangleRL.bind(tri))
-	// 	  	.on("drag",moveTriangleRL.bind(tri))
-	// 	  	// .on("end",dropTriangle.bind(tri))
-	// )
+	tri.element[3].call(d3.drag()
+			.on("start",selectedTriangleRL.bind(tri))
+		  	.on("drag",moveTriangleRL.bind(tri))
+		  	.on("end",dropTriangleRL.bind(tri))
+	)
 }
 
 function selectedTriangle(){
@@ -99,12 +111,6 @@ function calcLL(rect,selection){
 
 		d = d.pre;
 
-		// in Interval
-		dx -= chart.rectInterval;
-		if(dx < 0){
-			break;
-		}
-
 		// in rectangle
 		var width = d.size()/chart.bins.interval*chart.rectWidth
 		// console.log(width)
@@ -140,12 +146,10 @@ function selectedTriangleRR(){
 	currentX = d3.event.x;
 	oldWidth = new rectangle(null,this.chart).getWidth(d)
 	rectX = -(oldWidth/2)
-	if(d.next == null){
-		return
-	}
-	sub = this.chart.bins.addSub(d.next)
-
-
+	sub = this.chart.bins.addSub(d)
+	sub.pre = sub.next.pre
+	// sub.min = sub.pre.max
+	// sub.max = sub.next.min
 	
 }	
 
@@ -173,9 +177,8 @@ function moveTriangleRR(){
 		generatePoints(this.triangles[3],dx))
 
 	// change tooltip
-	if(sub == null)
-		return
 	var x = this.chart.bins.container[this.parent.i]
+	// console.log(x)
 	var x1 = x.rangeMin()
 	var x2 = calcRR(rect,this.parent)
 	var pos1 = x.i
@@ -196,12 +199,6 @@ function calcRR(rect,selection){
 	while(d.next != null){
 
 		d = d.next;
-
-		// in Interval
-		dx -= chart.rectInterval;
-		if(dx < 0){
-			break;
-		}
 
 		// in rectangle
 		var width = d.size()/chart.bins.interval*chart.rectWidth
@@ -288,7 +285,6 @@ function calcLR(rect,selection){
 
 	var dx =  parseInt(rect.attr("x")) - rectX + 1;
 	var pos = parseInt(dx / oldWidth * chart.bins.container[selection.i].size())  + d.rangeMin();
-	console.log(pos)
 
 	chart.bins.splitLeft(sub,pos);
 	return pos;
@@ -344,8 +340,7 @@ function moveTriangleRL(){
 	var x = this.chart.bins.container[this.parent.i]
 	var x1 = x.rangeMin() 
 	var x2 = calcRL(rect,this.parent)
-	console.log(sub)
-	var pos1 = x.pre == null ? 0 : x.pre.i 
+	var pos1 = x.i
 	var pos2 = sub.i
 	this.chart.tip.updateCombine(dx,x1,x2,pos1,pos2)
 }
@@ -358,57 +353,23 @@ function calcRL(rect,selection){
 
 	var dx =  oldWidth - parseFloat(rect.attr("width")) + 1;
 	var pos = d.rangeMax() -  parseInt(dx / oldWidth * chart.bins.container[selection.i].size()) ;
-	console.log(pos)
+	// console.log(pos)
 
-	 chart.bins.splitLeft(sub,pos);
+	chart.bins.splitRight(sub,pos);
 	return pos;
 }
 
 
-function dropTriangle(){
-
-	if(combine){
-		this.chart.bins.combine(this.leftI,this.rightI)
-	}else{
-		this.chart.bins.split(this.I,this.pos)
-	}
+function dropTriangleRL(){
+	this.chart.bins.updateRL(sub);
 	this.chart.clear();
 	main(this.chart.bins)
-
-	// d3.select("#selection rect")
-	// 		.attr("width",oldWidth)
-	// 		.attr("x",rectX)
-
-	// d3.select(selectedElement.parentNode).select(".ll")
-	// 	.attr("points",generatePoints(this.triangles[0],0))
-	// d3.select(selectedElement.parentNode).select(".rr")
-	// 	.attr("points",generatePoints(this.triangles[1],0))
-	// d3.select(selectedElement.parentNode).select(".lr")
-	// 	.attr("points",generatePoints(this.triangles[2],0))
-	// d3.select(selectedElement.parentNode).select(".rl")
-	// 	.attr("points",generatePoints(this.triangles[3],0))
-
-	// resetToolTip()
 }
-
 
 // helper function
 
 function generatePoints(points,dx){
 	return (points[0]+dx)+","+points[1]+" "+(points[2]+dx)+","+points[3]+" "+(points[4]+dx)+","+points[5]
-}
-
-function calcIofRR(rect,selection){
-	var chart = selection.chart
-	var x1 = parseInt(rect.attr('x'))+chart.rectX[selection.i]
-	var x2 = x1+parseInt(rect.attr('width'))
-	var result = selection.i;
-	for(var i=selection.i;i<chart.rectX.length;i++){
-		if(x2>chart.rectX[i]){
-			result = i
-		}
-	}
-	return result;
 }
 
 
