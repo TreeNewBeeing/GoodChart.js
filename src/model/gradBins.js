@@ -33,6 +33,17 @@ export class gradBins {
 		var arrange = [];
 		var min = this.getMinX();
 		var max = this.getMaxX();
+
+		// Freedman Binning
+		var quartile1 = parseInt(this.data.length/4);
+		var quartile2 = parseInt(this.data.length/4*3);
+		var range = this.data[quartile2][this.label] - this.data[quartile1][this.label]
+		var interval = parseInt(2 * range / Math.pow(this.data.length, 1/3))
+		this.interval = interval;
+		// console.log(interval)
+
+
+		
 		for(var i=min;i<=max;i+=this.interval){
 			arrange.push(i);
 		}
@@ -144,13 +155,13 @@ export class gradBins {
 			}
 		}
 
-		console.log(d.i,d.next)
+		// console.log(d.i,d.next)
 
 	}
 
 	updateRR(d){
 
-		console.log(d.min)
+		// console.log(d.min)
 		//  inserted node should not exist: no insertion needed
 		if(d.min == d.max || d.pre.min == d.min){
 			d.pre.next = d.next;
@@ -186,7 +197,7 @@ export class gradBins {
 				break;
 			}
 		}
-		console.log(d.i)
+		// console.log(d.i)
 		d.min = num;
 		
 	}
@@ -234,7 +245,7 @@ export class gradBins {
 				break;
 			}
 		}
-		console.log(d.i)
+		// console.log(d.i)
 		d.min = num;
 	}
 	updateRL(d){
@@ -271,10 +282,10 @@ export class gradBins {
 		this.container = container
 	}
 	getMinX(){
-		return parseInt(this.data[0][this.label]/this.interval)*this.interval;
+		return parseInt(this.data[0][this.label])/*/this.interval)*this.interval*/;
 	}
 	getMaxX(){
-		return parseInt(this.data[this.data.length-1][this.label]/this.interval)*this.interval+this.interval;
+		return parseInt(this.data[this.data.length-1][this.label])/*/this.interval)*this.interval+this.interval*/;
 	}
 
 	size(){

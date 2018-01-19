@@ -20,7 +20,8 @@ export function bindTriangle(tri){
 		)
 
 	}else{
-		tri.element[0].style("cursor","not-allowed")
+		// tri.element[0].style("cursor","not-allowed")
+		d3.select("#selection .ll").remove()
 	}
 
 
@@ -31,7 +32,8 @@ export function bindTriangle(tri){
 		  	.on("end",dropTriangleRR.bind(tri))
 		)
 	}else{
-		tri.element[1].style("cursor","not-allowed")
+		// tri.element[1].style("cursor","not-allowed")
+		d3.select("#selection .rr").remove()
 	}
 	tri.element[2].call(d3.drag()
 			.on("start",selectedTriangleLR.bind(tri))
@@ -71,6 +73,7 @@ function moveTriangleLL(){
 	var rect = d3.select("#selection rect")
 	var leftTri = d3.select("#selection .ll")
 	var rightTri = d3.select("#selection .lr")
+	var line = d3.select("#selection .l")
 
 	// calculate mouse move
 	var dx = d3.event.x - currentX;
@@ -86,7 +89,7 @@ function moveTriangleLL(){
 		generatePoints(this.triangles[0],dx))
 	rightTri.attr("points",
 		generatePoints(this.triangles[2],dx))
-	
+	line.attr("transform","translate("+dx+",0)")
 
 	// change tooltip
 	var x = this.chart.bins.container[this.parent.i]
@@ -160,6 +163,7 @@ function moveTriangleRR(){
 	var rect = d3.select("#selection rect")
 	var leftTri = d3.select("#selection .rl")
 	var rightTri = d3.select("#selection .rr")
+	var line = d3.select("#selection .r")
 
 	// calculate mouse move
 	var dx = d3.event.x - currentX;
@@ -169,12 +173,14 @@ function moveTriangleRR(){
 	var newWidth =  oldWidth + dx 
 	
 	// change selection
+
 	rect.attr("x",rectX)
 		.attr("width",newWidth)
 	leftTri.attr("points",
 		generatePoints(this.triangles[1],dx))
 	rightTri.attr("points",
 		generatePoints(this.triangles[3],dx))
+	line.attr("transform","translate("+dx+",0)")
 
 	// change tooltip
 	var x = this.chart.bins.container[this.parent.i]
@@ -251,6 +257,7 @@ function moveTriangleLR(){
 	var rect = d3.select("#selection rect")
 	var leftTri = d3.select("#selection .ll")
 	var rightTri = d3.select("#selection .lr")
+	var line = d3.select("#selection .l")
 
 	var dx = d3.event.x - currentX;
 	if(dx < 0 ){
@@ -268,6 +275,7 @@ function moveTriangleLR(){
 		generatePoints(this.triangles[2],dx))
 	rightTri.attr("points",
 		generatePoints(this.triangles[0],dx))
+	line.attr("transform","translate("+dx+",0)")
 
 	var x = this.chart.bins.container[this.parent.i]
 	var x1 = calcLR(rect,this.parent)
@@ -319,6 +327,7 @@ function moveTriangleRL(){
 	var rect = d3.select("#selection rect")
 	var leftTri = d3.select("#selection .rl")
 	var rightTri = d3.select("#selection .rr")
+	var line = d3.select("#selection .r")
 
 	var dx = d3.event.x - currentX;
 	if(dx > 0){
@@ -336,6 +345,7 @@ function moveTriangleRL(){
 
 	rightTri.attr("points",
 		generatePoints(this.triangles[1],dx))
+	line.attr("transform","translate("+dx+",0)")
 
 	var x = this.chart.bins.container[this.parent.i]
 	var x1 = x.rangeMin() 

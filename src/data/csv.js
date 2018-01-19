@@ -18,7 +18,6 @@ export function readCSV(file,label,interval,after,mode){
 				break;
 			case "gradual":
 				bins0 = new gradBins(data,label,interval)
-				// bins0.updateArrange([10,20,30,40,50,65,70,80])
 				console.log(bins0)
 				break;
 			default:

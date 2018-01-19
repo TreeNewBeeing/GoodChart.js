@@ -14,7 +14,7 @@ export class chart{
 		this.height = 500 - this.margin.top - this.margin.bottom
 
 		// rectangle config
-		this.rectWidth = 50
+		this.rectWidth = 24
 		this.rectInterval = 30
 
 		// bar config

@@ -14,8 +14,8 @@ export class rectangle{
 			.attr("x", this.getX.bind(this))
 			.attr("width", this.getWidth.bind(this))
 			.attr("height", this.getHeight.bind(this))
-			.style("fill","blue")
-			.style("stroke","red")
+			.style("fill","#3690c0")
+			.style("stroke","black")
 
 	    this.element = rect
 	    bindRectangle(this)

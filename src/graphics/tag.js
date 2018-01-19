@@ -10,10 +10,10 @@ export class tag{
 	draw(){
 		var tag = this.parent.element.append("text")
 			.text(this.getTag)
-			.attr("dy",this.getDy.bind(this))
+			.attr("transform",this.getTransform.bind(this))
 			.style("text-anchor", "middle")
 			.style("fill","black")
-			.style("font","10px sans-serif")
+			.style("font","9px sans-serif")
 
 		this.element = tag
 		bindTag(this)
@@ -23,8 +23,10 @@ export class tag{
 		return d.rangeMin() + " - " + d.rangeMax();
 	}
 
-	getDy(d){
+	getTransform(d){
 		var dy = this.chart.height-this.chart.y(d.value()) + this.chart.tagPadding
-		return dy;
+
+		var transform = "translate(0,"+dy+"), rotate(45)"
+		return transform;
 	}
 }

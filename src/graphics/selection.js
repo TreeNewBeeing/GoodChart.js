@@ -22,8 +22,8 @@ export class selection{
 	      .attr("i",this.i)
 	      .attr("width", this.width)
 	      .attr("height", this.height)
-	      .style("fill","white")
-	      .attr("stroke","red")
+	      .style("fill","#ff7f00")
+	      .attr("stroke","black")
 	      .style("opacity","0.5")
 
 	    this.adapt()
@@ -47,18 +47,33 @@ export class selection{
 	}
 
 	adapt(){
+		var selection = this.element
 		var rect = this.element.select("rect")
 		var tri = this.element.selectAll(".draggable")
 		var tooltip = this.chart.tip
+
+		var width = parseInt(rect.attr("width"))
 		var height = parseInt(rect.attr("height"))
 		if(height < 100){
+			selection.append("path")
+				.attr("class","l")
+				.attr("d","m "+(-width/2)+" "+height+
+						  "l 0 -100\
+				")
+				.attr("stroke","red")
+				.attr("stroke-dasharray","5,5")
+			selection.append("path")
+				.attr("class","r")
+				.attr("d","M "+(width/2)+" "+height+
+						 " l 0 -100\
+				")
+				.attr("stroke","red")
+				.attr("stroke-dasharray","5,5")
 			rect.attr("height",100)
-				.style("fill","white")
 				.attr("y",-100+height)
-				.style("stroke","red")
+				.style("stroke","none")
 				.style("opacity","0.5")
-				.attr('stroke-dasharray', '10,5')
-				.style('border-top',"0px")
+
 			tooltip.element.offset([-130+height,0])
 		}
 	}
