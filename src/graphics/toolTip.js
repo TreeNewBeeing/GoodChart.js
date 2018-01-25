@@ -27,6 +27,7 @@ export class toolTip{
 	}
 
 	show(d){
+		
 		this.element.show(d)
 		this.left = parseInt(d3.select(".d3-tip").style("left"))
 	}
@@ -56,23 +57,12 @@ export class toolTip{
 
 	}
 
-	updateSplit(dx, i, pos1, pos2){
-		// this.move(dx)
-
-		// var container = this.chart.bins.container
-		// console.log(pos1)
-		// var rangeMin = container[i].rangePos(pos1);
-		// var rangeMax = container[i].rangePos(pos2);
-
-		// var value = 0;
-		// for(var x=pos1;x<=pos2;x++){
-		// 	value += container[i][x].length;
-		// }
-
-		// var html = "<strong># of people:</strong> <span style='color:red;'>" + value + "</span><br> ";
-		// html += "<strong>range:</strong> <span style='colore:red;text-align:center'>" + rangeMin +" - "+ rangeMax + "</span>";
-
+	showNumBins(d){
+		console.log(d)
+		this.element.show(d)
+		// var html = "<strong># of Bins:</strong> 3"
 		// d3.select('.d3-tip').html(html)
+
 	}
 
 }

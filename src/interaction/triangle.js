@@ -7,6 +7,7 @@ import { rectangle } from "../graphics/rectangle"
 var currentX = 0;
 var rectX = 0;
 var oldWidth = 0;
+var num = 0;
 var combine = true;
 var sub = null;
 
@@ -136,7 +137,7 @@ function calcLL(rect,selection){
 function dropTriangleLL(){
 	this.chart.bins.updateLL(sub);
 	this.chart.clear();
-	main(this.chart.bins)
+	main(this.chart.bins,this.chart.rectWidth)
 }
 
 
@@ -228,7 +229,7 @@ function calcRR(rect,selection){
 function dropTriangleRR(){
 	this.chart.bins.updateRR(sub);
 	this.chart.clear();
-	main(this.chart.bins)
+	main(this.chart.bins,this.chart.rectWidth)
 }
 
 
@@ -302,7 +303,7 @@ function calcLR(rect,selection){
 function dropTriangleLR(){
 	this.chart.bins.updateLR(sub);
 	this.chart.clear();
-	main(this.chart.bins)
+	main(this.chart.bins,this.chart.rectWidth)
 }
 
 
@@ -373,8 +374,112 @@ function calcRL(rect,selection){
 function dropTriangleRL(){
 	this.chart.bins.updateRL(sub);
 	this.chart.clear();
+	main(this.chart.bins,this.chart.rectWidth)
+}
+
+
+
+
+// Num of Bin
+
+export function bindTriangle1(tri){
+
+	d3.select("#selection .ll").remove()
+	d3.select("#selection .lr").remove()
+
+	tri.element[1].call(d3.drag()
+		.on("start",selectedTriangle1.bind(tri))
+	  	.on("drag",moveTriangleRR1.bind(tri))
+	  	.on("end",dropTriangle1.bind(tri))
+	)
+
+	
+	tri.element[3].call(d3.drag()
+		.on("start",selectedTriangle1.bind(tri))
+	  	.on("drag",moveTriangleRL1.bind(tri))
+	  	.on("end",dropTriangle1.bind(tri))
+	)
+}
+
+function selectedTriangle1(){
+	currentX = d3.event.x;
+	oldWidth = this.parent.width
+	rectX = this.parent.x
+}	
+
+function moveTriangleRR1(){
+
+	// set up
+	var selection = d3.select("#selection")
+	var rect = d3.select("#selection rect")
+	var leftTri = d3.select("#selection .rl")
+	var rightTri = d3.select("#selection .rr")
+	var tip = d3.select("#selection .tip")
+
+	// calculate mouse move
+	var dx = d3.event.x - currentX;
+	if(dx < 0){
+		dx = 0
+	}
+	var newWidth =  oldWidth + dx 
+	
+	// change selection
+
+	rect.attr("x",rectX)
+		.attr("width",newWidth)
+	leftTri.attr("points",
+		generatePoints(this.triangles[1],dx))
+	rightTri.attr("points",
+		generatePoints(this.triangles[3],dx))
+
+	num = this.chart.bins.container.length
+	var add = parseInt(dx/this.chart.rectWidth);
+	num = add >= 10 ? num + 10 : num + add;
+	tip.text("# of Bins: "+num)
+	
+
+}
+
+function moveTriangleRL1(){
+
+	var selection = d3.select("#selection")
+	var rect = d3.select("#selection rect")
+	var leftTri = d3.select("#selection .rl")
+	var rightTri = d3.select("#selection .rr")
+	var tip = d3.select("#selection .tip")
+
+	var dx = d3.event.x - currentX;
+	if(dx > 0){
+		dx = 0
+	}
+	if(dx < -oldWidth+1){
+		dx = -oldWidth+1
+	}
+	var newWidth =  oldWidth + dx 
+	rect.attr("x",rectX)
+		.attr("width",newWidth)
+
+	leftTri.attr("points",
+		generatePoints(this.triangles[3],dx))
+
+	rightTri.attr("points",
+		generatePoints(this.triangles[1],dx))
+
+	num = this.chart.bins.container.length
+	var add = parseInt(dx/this.chart.rectWidth);
+	num = num + add >= 0 ? num + add : 0;
+	// console.log(tip)
+	tip.text("# of Bins: "+num)
+
+}
+
+function dropTriangle1(){
+	console.log(num)
+	this.chart.bins.createArrange(num);
+	this.chart.clear();
 	main(this.chart.bins)
 }
+
 
 // helper function
 

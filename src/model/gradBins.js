@@ -2,10 +2,9 @@ import * as d3 from "d3"
 
 export class gradBins {
 
-	constructor(data,label,interval){
+	constructor(data,label){
 		this.container = [];
 		this.label = label;
-		this.interval = interval;
 
 		// Sort
 		data.sort(function(a,b){
@@ -23,30 +22,49 @@ export class gradBins {
 		this.data = data.slice(index)
 
 		// arrange into parts
-		this.creataArrange();
+		this.createArrange();
 
 	}	
 
-	creataArrange(){
+	createArrange(n){
 
 		// generate arrange with evenly interval
 		var arrange = [];
 		var min = this.getMinX();
 		var max = this.getMaxX();
 
-		// Freedman Binning
-		var quartile1 = parseInt(this.data.length/4);
-		var quartile2 = parseInt(this.data.length/4*3);
-		var range = this.data[quartile2][this.label] - this.data[quartile1][this.label]
-		var interval = parseInt(2 * range / Math.pow(this.data.length, 1/3))
-		this.interval = interval;
-		// console.log(interval)
+		if(n==null){
+			// Freedman Binning
+			var quartile1 = parseInt(this.data.length/4);
+			var quartile2 = parseInt(this.data.length/4*3);
+			var range = this.data[quartile2][this.label] - this.data[quartile1][this.label]
+			var interval = parseInt(2 * range / Math.pow(this.data.length, 1/3))
+			this.interval = interval;
+			
+			for(var i=min;i<=max;i+=this.interval){
+				arrange.push(i);
+			}
 
 
-		
-		for(var i=min;i<=max;i+=this.interval){
-			arrange.push(i);
+		}else{
+			var range = this.data[this.data.length-1][this.label] - this.data[0][this.label];
+			var remain = range % n
+			var interval =  parseInt(range/n);
+			this.interval = interval;
+			var num = min
+			for(var i=0;i<=n;i++){
+				arrange.push(num);
+				num += interval;
+			}
+
+			for(var i=remain;i>0;i--){
+				arrange[n]+=i;
+				n--;
+			}
+			console.log(arrange)
 		}
+		
+		
 
 		// generate container
 		this.container = [];

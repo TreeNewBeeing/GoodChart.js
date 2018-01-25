@@ -6,20 +6,24 @@ import { axis } from "../graphics/axis"
 import { tag } from "../graphics/tag"
 import { toolTip } from "../graphics/toolTip"
 import { readCSV } from "../data/csv"
+import { dragselect } from "../graphics/drag-select"
 
 // const label = "Age",
 //       file = "../public/data.csv"
+var element;
 
-export function read(file,label,interval,mode){
-  readCSV(file,label,interval,main,mode)
+
+export function read(file,label,mode,e){
+  element = e
+  readCSV(file,label,main,mode)
 }
 
 
-export function main(bins){
+export function main(bins,rectWidth){
 
-  var chart0 = new chart(bins)
+  // console.log(element)
+  var chart0 = new chart(bins,rectWidth,element)
   chart0.draw()
-
 
   var bar0 = new bar(chart0,chart0)
   bar0.draw()
@@ -35,6 +39,11 @@ export function main(bins){
 
   var toolTip0 = chart0.tip;
   toolTip0.draw()
+
+  var dragselect0 = new dragselect(chart0)
+
+  
+
 
 }
 

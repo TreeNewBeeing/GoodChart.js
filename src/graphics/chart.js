@@ -3,8 +3,9 @@ import { toolTip } from "./toolTip"
 
 export class chart{
 
-	constructor(bins){
+	constructor(bins,rectWidth,element){
 
+		this.element = element;
 		// bins config
 		this.bins = bins
 
@@ -14,9 +15,14 @@ export class chart{
 		this.height = 500 - this.margin.top - this.margin.bottom
 
 		// rectangle config
-		this.rectWidth = 24
 		this.rectInterval = 30
+		if(rectWidth != null){
+    		this.rectWidth = rectWidth;
+  		}else{
+  			this.rectWidth = (this.width-(2*this.rectInterval))/this.bins.container.length;
+  		}
 
+  		
 		// bar config
 		this.rectX = this.getRectX()
 
@@ -46,13 +52,15 @@ export class chart{
 	}
 
 	draw(){
-		var svg = d3.select("body")
+		console.log(this.element)
+		var svg = d3.select(this.element)
 	      .append("svg")
 	      .attr("width", this.width + this.margin.left + this.margin.right)
 	      .attr("height", this.height + this.margin.top + this.margin.bottom)
 	      .append("g")
 	      .attr("transform", 
 	            "translate(" + this.margin.left + "," + this.margin.top + ")");
+	    
 	    
 	    this.element = svg;
 	}
@@ -63,6 +71,7 @@ export class chart{
 	}
 
 
+
 	// return an array of x positions of bars
 	getRectX(){
 
@@ -71,12 +80,14 @@ export class chart{
 		var bins = this.bins;
 		var start = this.rectInterval;
 
+
 		for(var i=0; i<bins.container.length;i++){
 			var length = bins.container[i].size() / bins.interval;
-			start = start + (this.rectWidth*length)
-			arr.push(start - (this.rectWidth*length/2))
+			start = start + ( this.rectWidth * length )
+			arr.push( start - ( this.rectWidth * length/2 ) )
 		}
-		// console.log(arr)
+
+
 		return arr;
 
 	}

@@ -44,9 +44,13 @@ svg{
 </style>
 
 <body>
+  <div class="chart">
+  </div>
 	<script type="text/javascript" src="out.js"></script>
 	<script type="text/javascript">
-		chart.read('./data.csv',"Age",10,"gradual")
+    var element = document.getElementsByClassName('chart')[0]
+		chart.read('./data.csv',"Age","gradual",element)
 	</script>
+  
 </body>
 </html>

@@ -1,5 +1,5 @@
 import * as d3 from 'd3'
-import { bindTriangle } from "../interaction/triangle"
+import { bindTriangle , bindTriangle1 } from "../interaction/triangle"
 
 export class triangle{
 
@@ -16,28 +16,32 @@ export class triangle{
 		// left-left triangle
 		var tri0 = this.parent.element.append("polygon")
 		.attr("class","draggable ll")
-		.attr("fill","black")
+		.attr("fill","white")
+		.attr("stroke","black")
 		.style("display","true")
 		.style("cursor","w-resize")
 
 		// right-right triangle
 		var tri1 = this.parent.element.append("polygon")
 		.attr("class","draggable rr")
-		.attr("fill","black")
+		.attr("fill","white")
+		.attr("stroke","black")
 		.style("display","true") 
 		.style("cursor","e-resize")
 
 		// left-right triangle
 		var tri2 = this.parent.element.append("polygon")
 		.attr("class","draggable lr")
-		.attr("fill","black")
+		.attr("fill","white")
+		.attr("stroke","black")
 		.style("display","true") 
 		.style("cursor","e-resize")
 
 		// right-left triangle
 		var tri3 = this.parent.element.append("polygon")
 		.attr("class","draggable rl")
-		.attr("fill","black")
+		.attr("fill","white")
+		.attr("stroke","black")
 		.style("display","true") 
 		.style("cursor","w-resize")
 
@@ -50,7 +54,12 @@ export class triangle{
 
 		this.element = [tri0,tri1,tri2,tri3]
 
-		bindTriangle(this)
+		if(this.parent.mode == "numBin"){
+			bindTriangle1(this);
+		}else{
+			bindTriangle(this);
+		}
+		
 
 
 	}

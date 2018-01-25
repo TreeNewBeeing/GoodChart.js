@@ -4,9 +4,10 @@ import { bindSelection } from "../interaction/selection"
 
 export class selection{
 	
-	constructor(parent,chart){
+	constructor(parent,chart,mode){
 		this.parent = parent;
 		this.chart = chart;
+		this.mode = mode
 	}
 
 	draw(){
@@ -31,7 +32,7 @@ export class selection{
 	    triangle0.draw()
 
 	    
-
+	    
 	    bindSelection(this)
 	    // this.parent.element.appendChild(selection)
 
