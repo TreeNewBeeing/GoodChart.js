@@ -99,15 +99,17 @@ export class gradBins {
 				var y = bin0.i - pre.i;
 				maxY = y > maxY ? y : maxY;
 			}
-
 			// normal incrementing
 			pre = bin0;
 			
 		}
 
+		// first element 
+		maxY = this.container[0].value() > maxY ? this.container[0].value() : maxY
 		// update maxX, maxY
 		this.maxX = maxX;
 		this.maxY = maxY;
+		console.log(this.container)
 
 	}
 

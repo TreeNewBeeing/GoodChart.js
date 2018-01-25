@@ -467,7 +467,7 @@ function moveTriangleRL1(){
 
 	num = this.chart.bins.container.length
 	var add = parseInt(dx/this.chart.rectWidth);
-	num = num + add >= 0 ? num + add : 0;
+	num = num + add > 0 ? num + add : 1;
 	// console.log(tip)
 	tip.text("# of Bins: "+num)
 
