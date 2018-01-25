@@ -60,7 +60,9 @@ export class gradBins {
 			for(var i=remain;i>0;i--){
 				arrange[n]+=i;
 				n--;
+
 			}
+			// this.interval = remain != 0 ? this.interval+1:this.interval
 			console.log(arrange)
 		}
 		

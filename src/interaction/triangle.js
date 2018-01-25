@@ -477,7 +477,9 @@ function dropTriangle1(){
 	console.log(num)
 	this.chart.bins.createArrange(num);
 	this.chart.clear();
-	main(this.chart.bins)
+	var range = this.chart.bins.getMaxX()-this.chart.bins.getMinX()
+	var rectWidth = (this.chart.width-(2*this.chart.rectInterval))/parseInt(range/this.chart.bins.interval);
+	main(this.chart.bins,rectWidth)
 }
 
 
